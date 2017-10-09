@@ -4,13 +4,12 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
+ *
  *******************************************************************************/
-grammar org.eclipse.xtext.ui.tests.TestLanguage with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.xtext.ui.tests.parser.keywords.KeywordsUiTestLanguage with org.eclipse.xtext.common.Terminals
 
-generate foo "http://foo"
-
-File :
-	(stuff+=Stuff)*;
-	
-Stuff :
-	"stuff" name=ID ("refs" refs=[Stuff])?;
+generate keywordsUiTestLanguage "http://www.eclipse.org/2009/xtext/ui/common/tests/KeywordsTestLanguage"
+ 
+Model:
+  first?="foo\\bar" | second?="foo\\" | third?="\\bar" | forth?="\\" |
+  fifth?="\"a\"" | sixth?='\'b\'' | seventh?="'c'" | eighth?='"d"'; 

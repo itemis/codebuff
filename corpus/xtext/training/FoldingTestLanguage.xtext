@@ -5,12 +5,15 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-grammar org.eclipse.xtext.ui.tests.TestLanguage with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.xtext.ui.tests.FoldingTestLanguage with org.eclipse.xtext.common.Terminals
 
-generate foo "http://foo"
+generate folding "http://eclipse.org/Xtext/Tests/FoldingTestLanguage"
 
-File :
-	(stuff+=Stuff)*;
-	
-Stuff :
-	"stuff" name=ID ("refs" refs=[Stuff])?;
+FoldingModel:
+    elements+=Element*
+;
+
+Element : 'element' name=ID
+    subelements+=Element*
+    'end'
+;

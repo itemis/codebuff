@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-grammar org.eclipse.xtext.parser.parameters.ParametersTestLanguage with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.xtext.ui.tests.editor.contentassist.ParametersTestLanguage with org.eclipse.xtext.common.Terminals
 
 generate parametersTestLanguage "http://www.eclipse.org/2015/tmf/xtext/parameters"
 
@@ -18,10 +18,12 @@ ParserRuleParameters: {ParserRuleParameters}
   | =>('#6' scenario=Scenario2<false>)
   | '#7' scenario=Scenario3<true>
   | '#8' scenario=Scenario3<false>
-  | '#9' (scenario=Scenario4<true> | scenario=Scenario2<true> 'keyword'?)
-  | '#10' (scenario=Scenario4<true> | scenario=Scenario2<false> 'keyword'?)
-  | '#11' (scenario=Scenario4<false> | scenario=Scenario2<true> 'keyword'?)
-  | '#12' (scenario=Scenario4<false> | scenario=Scenario2<false> 'keyword'?)
+  | '#9' (scenario=Scenario4<true> | scenario=Scenario2<true> 'trailing'?)
+  | '#10' (scenario=Scenario4<true> | scenario=Scenario2<false> 'trailing'?)
+  | '#11' (scenario=Scenario4<false> | scenario=Scenario2<true> 'trailing'?)
+  | '#12' (scenario=Scenario4<false> | scenario=Scenario2<false> 'trailing'?)
+  | '#13' scenario=Scenario5<false>
+  | '#14' scenario=Scenario5<true>
   )
 ;
 
@@ -36,11 +38,17 @@ Scenario2<AllowKeyword> returns Scenario:
 
 Scenario3<AllowKeyword> returns Scenario:
 	=>first=IdOrKeyword<AllowKeyword>
-	| second='keyword'
+	| second='scenario3'
 ;
 
 Scenario4<AllowKeyword> returns Scenario:
-	=>second=IdOrKeyword<AllowKeyword> 'keyword'
+	=>second=IdOrKeyword<AllowKeyword> 'scenario4'
+;
+
+Scenario5<Include> returns Scenario:
+	  <Include> {Scenario} 'include'
+	| {Scenario} 'trailing'
+	| {Scenario} 'scenario5' (<Include> 'include')? first=IdOrKeyword<true> second=IdOrKeyword<false>
 ;
 
 IdOrKeyword<Keyword>:

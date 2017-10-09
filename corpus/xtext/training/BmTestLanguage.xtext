@@ -5,12 +5,29 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-grammar org.eclipse.xtext.ui.tests.TestLanguage with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.xtext.ui.tests.editor.bracketmatching.BmTestLanguage with org.eclipse.xtext.common.Terminals
 
-generate foo "http://foo"
+generate bracketmatching "http://xtext.org/ui/integartion/tests/bracketmatching"
 
 File :
-	(stuff+=Stuff)*;
+	(expression+=Expression)*;
 	
-Stuff :
-	"stuff" name=ID ("refs" refs=[Stuff])?;
+Expression :
+  SExpression |
+  Atom |
+  "[" Expression "]";
+	
+SExpression:
+    {SExpression}
+    ("("
+      element+=Expression* 
+    ")" |
+    "begin"
+      element+=Expression* 
+    "end"
+    );
+    
+Atom :
+  value=VALUE;
+  
+VALUE : ID|INT|STRING;

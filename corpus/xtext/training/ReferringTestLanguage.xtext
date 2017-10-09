@@ -1,16 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2009 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2010 itemis AG (http://www.itemis.eu) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-grammar org.eclipse.xtext.ui.tests.TestLanguage with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.xtext.ui.tests.refactoring.ReferringTestLanguage with org.eclipse.xtext.common.Terminals
 
-generate foo "http://foo"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
-File :
-	(stuff+=Stuff)*;
+generate referring "http://www.eclipse.org/xtext/referringTestLanguage"
+
+Main: 
+	referenced+=Reference*;
+
+Reference:
+	'ref' referenced =[ecore::EObject|FQN]; 
 	
-Stuff :
-	"stuff" name=ID ("refs" refs=[Stuff])?;
+FQN:
+	ID ('.' ID)*;
+	

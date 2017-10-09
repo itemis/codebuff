@@ -5,12 +5,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-grammar org.eclipse.xtext.ui.tests.TestLanguage with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.xtext.ui.tests.editor.contentassist.CrossReferenceProposalTestLanguage
+ 	with org.eclipse.xtext.common.Terminals
 
-generate foo "http://foo"
+generate crossReferenceProposalTest "http://www.eclipse.org/xtext/ui/common/tests/2009/crossReferenceProposalTest"
 
-File :
-	(stuff+=Stuff)*;
-	
-Stuff :
-	"stuff" name=ID ("refs" refs=[Stuff])?;
+Model :
+        (elements+=Class)*;
+
+Class :
+        (superClass=[Class] '<-')? name=ID '{'
+        '}';
