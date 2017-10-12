@@ -100,7 +100,7 @@ public class Tool {
 		new LangDescriptor("tsql", "corpus/sqlclean/training", ".*\\.sql", tsqlLexer.class, tsqlParser.class, "tsql_file", 4, tsqlLexer.LINE_COMMENT);
 
 	public static final LangDescriptor XTEXT_DESCR =
-			new LangDescriptor("xtext", "corpus/xtext/training", ".*\\.xtext", XtextLexer.class, XtextParser.class, "ruleGrammar", 4, XtextParser.RULE_SL_COMMENT);
+			new LangDescriptor("xtext", "corpus/xtext/leaveoneout", ".*\\.xtext", XtextLexer.class, XtextParser.class, "ruleGrammar", 4, XtextParser.RULE_SL_COMMENT);
 
 	public static LangDescriptor[] languages = new LangDescriptor[] {
 		QUORUM_DESCR,
