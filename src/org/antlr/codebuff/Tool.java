@@ -222,11 +222,17 @@ public class Tool {
 		format(language, testFileName, outputFileName);
 	}
 
-	public static void format(LangDescriptor language,
-	                          String testFileName,
-	                          String outputFileName)
-		throws Exception
-	{
+	public static void format(LangDescriptor language, String testFileName, String outputFileName) throws Exception {
+		String output = format(language,testFileName);
+		if (outputFileName!=null) {
+			Utils.writeFile(outputFileName, output);
+		}
+		else {
+			System.out.print(output);
+		}
+	}
+
+	public static String format(LangDescriptor language, String testFileName) throws Exception{
 		// load all files up front
 		List<String> allFiles = getFilenames(new File(language.corpusDir), language.fileRegex);
 		List<InputDocument> documents = load(allFiles, language);
@@ -238,15 +244,8 @@ public class Tool {
 		corpus.train();
 
 		Formatter formatter = new Formatter(corpus, language.indentSize, Formatter.DEFAULT_K,
-		                                    FEATURES_INJECT_WS, FEATURES_HPOS);
-		String output = formatter.format(testDoc, false);
-
-		if ( outputFileName!=null ) {
-			Utils.writeFile(outputFileName, output);
-		}
-		else {
-			System.out.print(output);
-		}
+				FEATURES_INJECT_WS, FEATURES_HPOS);
+		return formatter.format(testDoc, false);
 	}
 
 	public static void setToolVersion() throws IOException {
