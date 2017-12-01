@@ -104,9 +104,11 @@ public class Trainer {
 	// indexes into feature vector
 
 	public static final int INDEX_PREV_TYPE                     = 0;
+	public static final int INDEX_PREV_TOKEN_LENGTH             = 22;
 	public static final int INDEX_PREV_FIRST_ON_LINE            = 1; // a \n right before this token?
 	public static final int INDEX_PREV_EARLIEST_RIGHT_ANCESTOR  = 2;
 	public static final int INDEX_CUR_TOKEN_TYPE                = 3;
+	public static final int INDEX_CUR_TOKEN_LENGTH              = 23;
 	public static final int INDEX_MATCHING_TOKEN_STARTS_LINE    = 4;
 	public static final int INDEX_MATCHING_TOKEN_ENDS_LINE      = 5;
 	public static final int INDEX_FIRST_ON_LINE		            = 6; // a \n right before this token?
@@ -126,11 +128,11 @@ public class Trainer {
 	public static final int INDEX_ANCESTORS_PARENT5_RULE        = 20;
 	public static final int INDEX_ANCESTORS_PARENT5_CHILD_INDEX = 21;
 
-	public static final int INDEX_INFO_FILE                     = 22;
-	public static final int INDEX_INFO_LINE                     = 23;
-	public static final int INDEX_INFO_CHARPOS                  = 24;
+	public static final int INDEX_INFO_FILE                     = 24;
+	public static final int INDEX_INFO_LINE                     = 25;
+	public static final int INDEX_INFO_CHARPOS                  = 26;
 
-	public static final int NUM_FEATURES                        = 25;
+	public static final int NUM_FEATURES                        = 27;
 	public static final int ANALYSIS_START_TOKEN_INDEX          = 1; // we use current and previous token in context so can't start at index 0
 
 	public final static FeatureMetaData[] FEATURES_INJECT_WS = { // inject ws or nl
@@ -156,6 +158,8 @@ public class Trainer {
 		FeatureMetaData.UNUSED,
 		FeatureMetaData.UNUSED,
 		FeatureMetaData.UNUSED,
+		new LengthFeatureMetadata(new String[] { "curr", "len" }),
+		new LengthFeatureMetadata(new String[] {"prev", "len"}),
 		new FeatureMetaData(INFO_FILE,    new String[] {"", "file"}, 0),
 		new FeatureMetaData(INFO_LINE,    new String[] {"", "line"}, 0),
 		new FeatureMetaData(INFO_CHARPOS, new String[] {"char", "pos"}, 0)
@@ -184,6 +188,8 @@ public class Trainer {
 		new FeatureMetaData(INT,   new String[] {"parent^4", "child index"}, 1),
 		new FeatureMetaData(RULE,  new String[] {"", "parent^5"}, 1),
 		new FeatureMetaData(INT,   new String[] {"parent^5", "child index"}, 1),
+		new LengthFeatureMetadata(new String[] { "curr", "len" }),
+		new LengthFeatureMetadata(new String[] {"prev", "len"}),
 		new FeatureMetaData(INFO_FILE,    new String[] {"", "file"}, 0),
 		new FeatureMetaData(INFO_LINE,    new String[] {"", "line"}, 0),
 		new FeatureMetaData(INFO_CHARPOS, new String[] {"char", "pos"}, 0)
@@ -212,6 +218,8 @@ public class Trainer {
 		new FeatureMetaData(INT,   new String[] {"parent^4", "child index"}, 1),
 		new FeatureMetaData(RULE,  new String[] {"", "parent^5"}, 1),
 		new FeatureMetaData(INT,   new String[] {"parent^5", "child index"}, 1),
+		new LengthFeatureMetadata(new String[] { "curr", "len" }),
+		new LengthFeatureMetadata(new String[] {"prev", "len"}),
 		new FeatureMetaData(INFO_FILE,    new String[] {"", "file"}, 0),
 		new FeatureMetaData(INFO_LINE,    new String[] {"", "line"}, 0),
 		new FeatureMetaData(INFO_CHARPOS, new String[] {"char", "pos"}, 0)
@@ -602,6 +610,9 @@ public class Trainer {
 
 		features[INDEX_MATCHING_TOKEN_STARTS_LINE] = getMatchingSymbolStartsLine(corpus, doc, node);
 		features[INDEX_MATCHING_TOKEN_ENDS_LINE]   = getMatchingSymbolEndsLine(corpus, doc, node);
+
+    features[INDEX_CUR_TOKEN_LENGTH] = LengthFeatureMetadata.logicalLength(curToken.getText());
+    features[INDEX_PREV_TOKEN_LENGTH] = LengthFeatureMetadata.logicalLength(prevToken.getText());
 
 		features[INDEX_INFO_FILE]    = 0; // dummy; _toString() dumps filename w/o this value; placeholder for col in printout
 		features[INDEX_INFO_LINE]    = curToken.getLine();
@@ -1070,4 +1081,5 @@ public class Trainer {
 	public static int[] unlistform(int v) {
 		return new int[] { v>>24&0xFF, v>>16&0xFF, v>>8&0xFF, v & 0xFF };
 	}
+
 }

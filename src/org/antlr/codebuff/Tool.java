@@ -447,9 +447,7 @@ public class Tool {
 				 type==FeatureType.INT ||
 				 type==FeatureType.BOOL)
 			{
-				if ( A[i] != B[i] ) {
-					count += featureTypes[i].mismatchCost;
-				}
+				count += featureTypes[i].mismatchCost(A[i], B[i]);
 			}
 		}
 		return count;
