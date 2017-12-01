@@ -18,4 +18,11 @@ public class FeatureMetaData {
 		this.type = type;
 	}
 
+	public double mismatchCost(int left, int right) {
+		if ( left != right ) {
+			return mismatchCost;
+		}
+		return 0;
+	}
+
 }
